@@ -1,0 +1,57 @@
+# Data & outputs (large, gitignored — distribute via HuggingFace Hub or local NAS)
+data/
+models/
+
+# Model weights
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.gguf
+*.bin
+
+# Generated media (except docs assets)
+*.mp4
+*.wav
+*.flac
+*.png
+!docs/assets/**/*.png
+!assets/**/*.png
+*.jpg
+*.jpeg
+!docs/assets/**/*.jpg
+!assets/**/*.jpg
+
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# uv
+uv.lock

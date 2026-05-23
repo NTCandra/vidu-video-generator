@@ -1,0 +1,64 @@
+# Visual style preset — default (cultivation/fantasy anime)
+# Add more files (e.g., romance.yaml, dark_fantasy.yaml) for per-series overrides.
+
+name: "default"
+description: "Cultivation / tu tiên fantasy, anime style"
+
+# Appended to ALL positive prompts
+positive_tags:
+  - "masterpiece"
+  - "best quality"
+  - "ultra detailed"
+  - "anime style"
+  - "illustration"
+  - "cinematic lighting"
+  - "detailed background"
+  - "vibrant colors"
+
+# Appended to ALL negative prompts
+negative_tags:
+  - "lowres"
+  - "bad anatomy"
+  - "bad hands"
+  - "text"
+  - "error"
+  - "missing fingers"
+  - "extra digit"
+  - "fewer digits"
+  - "cropped"
+  - "worst quality"
+  - "low quality"
+  - "normal quality"
+  - "jpeg artifacts"
+  - "signature"
+  - "watermark"
+  - "username"
+  - "blurry"
+  - "3d"
+  - "realistic"
+  - "photorealistic"
+
+# Sampler overrides (leaves pipeline.yaml defaults if not set here)
+sampler:
+  steps: 30
+  cfg: 7.0
+  sampler: dpm++_2m
+  scheduler: karras
+
+# Mood-based prompt additions (appended to the scene's image_prompt_en by the LLM or by batch.py)
+mood_prompt_additions:
+  calm:
+    positive: ["soft lighting", "peaceful atmosphere", "serene"]
+    negative: []
+  tense:
+    positive: ["dramatic lighting", "intense atmosphere", "dynamic composition"]
+    negative: ["soft lighting"]
+  action:
+    positive: ["action scene", "dynamic pose", "motion blur", "energy effects", "aura"]
+    negative: ["static", "standing still"]
+  sad:
+    positive: ["melancholic", "muted colors", "rain", "overcast"]
+    negative: ["happy", "bright colors"]
+  mysterious:
+    positive: ["fog", "mystical", "ethereal glow", "ancient ruins"]
+    negative: []

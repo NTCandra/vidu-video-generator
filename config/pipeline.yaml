@@ -1,0 +1,106 @@
+# Central pipeline configuration.
+# All paths are relative to the project root unless absolute.
+# Override any value via environment variable VPIPE_<SECTION>_<KEY> (uppercase, dots → underscores).
+
+# ─── LLM (scene breakdown) ────────────────────────────────────────────────────
+llm:
+  # "ollama" (local, default) or "anthropic" (requires ANTHROPIC_API_KEY)
+  backend: ollama
+  ollama:
+    model: qwen2.5:32b-instruct-q4_K_M
+    # URL read from OLLAMA_URL env var; fallback below
+    url: http://127.0.0.1:11434
+    temperature: 0.3
+    timeout_sec: 120
+  anthropic:
+    model: claude-sonnet-4-6
+    max_tokens: 4096
+    temperature: 0.3
+
+# ─── Image generation (ComfyUI) ───────────────────────────────────────────────
+imagegen:
+  # URL read from COMFYUI_URL env var; fallback below
+  comfyui_url: http://127.0.0.1:8188
+  # Default workflow file (relative to workflows/)
+  default_workflow: txt2img_base.json
+  # Output image size
+  width: 1024
+  height: 1024
+  # Sampler settings
+  steps: 28
+  cfg: 6.5
+  sampler: dpm++_2m
+  scheduler: karras
+  # Max retries on generation failure (new seed each time)
+  max_retries: 3
+  # Timeout waiting for ComfyUI to finish a single image (seconds)
+  timeout_sec: 300
+
+# ─── TTS ──────────────────────────────────────────────────────────────────────
+tts:
+  # "f5tts", "gpt_sovits", or "xtts" (fallback)
+  backend: gpt_sovits
+  language: vi
+  # Target loudness for narration (EBU R128)
+  loudness_lufs: -16
+  gpt_sovits:
+    api_url: http://127.0.0.1:9880
+  f5tts:
+    # Path to F5-TTS model checkpoint (optional, uses default if empty)
+    model_path: ""
+  xtts:
+    model_name: tts_models/multilingual/multi-dataset/xtts_v2
+
+# ─── Motion ───────────────────────────────────────────────────────────────────
+motion:
+  # Ken Burns preset durations (seconds); actual duration comes from scene est_duration_sec
+  ken_burns:
+    # Zoom speed: fraction of image size per second (0.02 = 2% zoom per second)
+    zoom_speed: 0.02
+    # Mood → motion type mapping
+    moods:
+      calm: zoom_out
+      tense: zoom_in
+      action: pan_right
+      sad: zoom_out_slow
+      default: zoom_in
+  i2v:
+    workflow: i2v_wan22.json
+    # Seconds of video to generate (Wan 2.2 supports 3-5s well)
+    duration_sec: 4
+    # Fall back to Ken Burns if I2V fails
+    fallback_to_ken_burns: true
+    timeout_sec: 600
+
+# ─── Assembly ─────────────────────────────────────────────────────────────────
+assembly:
+  # Final output resolution
+  width: 1920
+  height: 1080
+  fps: 24
+  # H.264 encoding quality (lower = better, 18-20 is transparent)
+  crf: 18
+  # Audio
+  audio_bitrate: 192k
+  # Crossfade between scenes (seconds)
+  crossfade_sec: 0.4
+  # BGM ducking: how many dB to lower BGM during narration
+  bgm_duck_db: -12
+  bgm_fade_sec: 1.0
+  # Subtitle settings
+  subtitles:
+    font: "Be Vietnam Pro"
+    font_path: "assets/fonts/BeVietnamPro-Regular.ttf"
+    font_size: 36
+    color: white
+    # Semi-transparent dark background box
+    box: true
+    box_color: "0x00000080"
+    position: bottom_center
+    margin_v: 40
+  # ASR for subtitle generation
+  asr:
+    model: large-v3
+    language: vi
+    # Re-align ASR output against LLM narration text to fix diacritics
+    realign: true
