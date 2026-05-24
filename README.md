@@ -44,6 +44,8 @@ uv run vpipe --help
 
 ## Development
 
+Dev tools (ruff, mypy, pytest) are installed automatically by `uv sync`.
+
 ```bash
 uv run ruff check src/
 uv run mypy src/
