@@ -24,16 +24,6 @@ dependencies = [
     "pyloudnorm>=0.1",
 ]
 
-[project.optional-dependencies]
-dev = [
-    "ruff>=0.4",
-    "mypy>=1.10",
-    "pytest>=8.0",
-    "pytest-mock>=3.14",
-    "types-requests",
-    "types-PyYAML",
-]
-
 [project.scripts]
 vpipe = "video_pipeline.cli:app"
 
@@ -58,10 +48,16 @@ ignore_missing_imports = true
 module = ["moviepy.*", "faster_whisper.*", "pyloudnorm.*"]
 ignore_missing_imports = true
 
+[tool.uv]
+dev-dependencies = [
+    "ruff>=0.4",
+    "mypy>=1.10",
+    "pytest>=8.0",
+    "pytest-mock>=3.14",
+    "types-requests",
+    "types-PyYAML",
+]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-v"
-
-# Run tests:  uv run --with pytest pytest
-# Run linter: uv run ruff check src/
-# Run types:  uv run mypy src/
