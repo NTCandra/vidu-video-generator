@@ -1,0 +1,37 @@
+# Character configuration schema — copy and rename to <character_id>.yaml
+# character_id should be a short snake_case identifier (e.g., "ly_tieu_long")
+
+# Display name (Vietnamese)
+name: "Ví dụ Nhân Vật"
+
+# Trigger word used in image prompts — must match LoRA training trigger word exactly
+trigger_word: "example_char_v1"
+
+# Path to trained LoRA weights (relative to project root, gitignored)
+lora_path: "models/loras/characters/example_char_v1.safetensors"
+
+# LoRA strength in image generation (0.0–1.5; typically 0.7–0.9)
+lora_strength: 0.8
+
+# Tags always appended to positive prompt when this character appears
+default_prompt_tags:
+  - "1girl"
+  - "long black hair"
+  - "cultivation robes"
+  - "amber eyes"
+
+# Tags always appended to negative prompt for this character
+negative_tags:
+  - "male"
+  - "old"
+
+# Reference images for IPAdapter (side characters without a LoRA)
+# Leave empty if using LoRA
+ipadapter_refs: []
+# ipadapter_refs:
+#   - "data/references/characters/example/ref_01.png"
+#   - "data/references/characters/example/ref_02.png"
+
+# Voice profile for this character's dialogue (references tts voice profile id)
+# Narrator uses a separate "narrator" profile defined in pipeline.yaml or voice_profiles.yaml
+voice_profile: "narrator"
