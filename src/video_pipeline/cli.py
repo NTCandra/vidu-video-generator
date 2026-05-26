@@ -26,12 +26,51 @@ def scenes(
 @app.command()
 def images(
     scenes_path: str = typer.Option(..., "--scenes", help="Path to scenes.json"),
-    workflow: str = typer.Option("txt2img_base", "--workflow", "-w", help="Workflow name (without .json)"),
+    workflow: str = typer.Option("txt2img_base", "--workflow", "-w", help="Workflow name in workflows/api/ (without .json)"),
     out: str = typer.Option("data/intermediate", "--out", "-o", help="Output directory for PNGs"),
+    style: str = typer.Option("default", "--style", help="Style preset name from config/styles/"),
+    timeout: int = typer.Option(300, "--timeout", help="Per-image timeout in seconds"),
 ) -> None:
     """Phase 2 — Generate images for each scene via ComfyUI API."""
-    console.print("[yellow]images: not implemented yet[/yellow]")
-    raise typer.Exit(code=1)
+    import json
+    import sys
+    from pathlib import Path
+
+    from video_pipeline.imagegen.batch import generate_batch
+    from video_pipeline.imagegen.comfy_client import ComfyConnectionError, ComfyError
+
+    scenes_file = Path(scenes_path)
+    if not scenes_file.exists():
+        console.print(f"[red]ERROR: scenes file not found: {scenes_path}[/red]")
+        raise typer.Exit(code=1)
+
+    with open(scenes_file) as f:
+        data = json.load(f)
+
+    scene_list = data if isinstance(data, list) else data.get("scenes", [])
+    if not scene_list:
+        console.print("[red]ERROR: no scenes found in the JSON file[/red]")
+        raise typer.Exit(code=1)
+
+    output_dir = Path(out)
+    console.print(f"Generating [bold]{len(scene_list)}[/bold] images → [cyan]{output_dir}[/cyan]")
+
+    try:
+        results = generate_batch(
+            scene_list,
+            workflow,
+            output_dir,
+            timeout=timeout,
+            style_name=style,
+        )
+    except ComfyConnectionError as exc:
+        console.print(f"[red]Connection error:[/red] {exc}")
+        raise typer.Exit(code=1)
+    except ComfyError as exc:
+        console.print(f"[red]ComfyUI error:[/red] {exc}")
+        raise typer.Exit(code=1)
+
+    console.print(f"[green]Done.[/green] {len(results)}/{len(scene_list)} images saved to [cyan]{output_dir}[/cyan]")
 
 
 @app.command()
