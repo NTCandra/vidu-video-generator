@@ -20,7 +20,8 @@ console = Console()
 # Defaults applied when pipeline.yaml / scene data don't specify these fields.
 _GENERATION_DEFAULTS: dict[str, Any] = {
     "checkpoint": "Illustrious-XL-v0.1.safetensors",
-    "steps": 28,
+    "vae": "sdxl_vae_fp16.safetensors",
+    "steps": 30,
     "cfg": 6.5,
     "sampler": "dpmpp_2m",
     "scheduler": "karras",
@@ -100,6 +101,7 @@ def generate_batch(
     gen_defaults: dict[str, Any] = {
         **_GENERATION_DEFAULTS,
         "checkpoint": pipeline_cfg.get("checkpoint", _GENERATION_DEFAULTS["checkpoint"]),
+        "vae": pipeline_cfg.get("vae", _GENERATION_DEFAULTS["vae"]),
         "steps": pipeline_cfg.get("steps", _GENERATION_DEFAULTS["steps"]),
         "cfg": pipeline_cfg.get("cfg", _GENERATION_DEFAULTS["cfg"]),
         "sampler": pipeline_cfg.get("sampler", _GENERATION_DEFAULTS["sampler"]),

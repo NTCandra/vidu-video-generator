@@ -1,13 +1,14 @@
 {
   "_meta": {
     "workflow": "txt2img_base",
-    "version": "1.0.0",
-    "description": "API-format template for programmatic use. {{params}} are injected by comfy_client.inject_params().",
+    "version": "1.1.0",
+    "description": "API-format template. Uses a dedicated VAELoader (node 11) instead of the checkpoint's built-in VAE for sharper results with Illustrious XL.",
     "params": {
       "positive_prompt": "CLIP positive text",
       "negative_prompt": "CLIP negative text",
-      "seed": "integer seed (0 = random)",
+      "seed": "integer seed",
       "checkpoint": "checkpoint filename in ComfyUI models/checkpoints/",
+      "vae": "VAE filename in ComfyUI models/vae/",
       "steps": "KSampler steps",
       "cfg": "KSampler CFG scale",
       "sampler": "KSampler sampler_name",
@@ -19,6 +20,10 @@
   "4": {
     "class_type": "CheckpointLoaderSimple",
     "inputs": {"ckpt_name": "{{checkpoint}}"}
+  },
+  "11": {
+    "class_type": "VAELoader",
+    "inputs": {"vae_name": "{{vae}}"}
   },
   "6": {
     "class_type": "CLIPTextEncode",
@@ -49,7 +54,7 @@
   },
   "8": {
     "class_type": "VAEDecode",
-    "inputs": {"samples": ["3", 0], "vae": ["4", 2]}
+    "inputs": {"samples": ["3", 0], "vae": ["11", 0]}
   },
   "9": {
     "class_type": "SaveImage",
