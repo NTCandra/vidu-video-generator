@@ -22,7 +22,7 @@ _GENERATION_DEFAULTS: dict[str, Any] = {
     "checkpoint": "Illustrious-XL-v0.1.safetensors",
     "steps": 28,
     "cfg": 6.5,
-    "sampler": "dpm++_2m",
+    "sampler": "dpmpp_2m",
     "scheduler": "karras",
     "width": 1024,
     "height": 1024,

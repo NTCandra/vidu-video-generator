@@ -42,7 +42,7 @@ negative_tags:
 sampler:
   steps: 30
   cfg: 7.0
-  sampler: dpm++_2m
+  sampler: dpmpp_2m
   scheduler: karras
 
 # Mood-based prompt additions (appended to the scene's image_prompt_en by the LLM or by batch.py)
