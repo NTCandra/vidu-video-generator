@@ -1,0 +1,58 @@
+{
+  "_meta": {
+    "workflow": "txt2img_base",
+    "version": "1.0.0",
+    "description": "API-format template for programmatic use. {{params}} are injected by comfy_client.inject_params().",
+    "params": {
+      "positive_prompt": "CLIP positive text",
+      "negative_prompt": "CLIP negative text",
+      "seed": "integer seed (0 = random)",
+      "checkpoint": "checkpoint filename in ComfyUI models/checkpoints/",
+      "steps": "KSampler steps",
+      "cfg": "KSampler CFG scale",
+      "sampler": "KSampler sampler_name",
+      "scheduler": "KSampler scheduler",
+      "width": "image width (pixels)",
+      "height": "image height (pixels)"
+    }
+  },
+  "4": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {"ckpt_name": "{{checkpoint}}"}
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {"text": "{{positive_prompt}}", "clip": ["4", 1]}
+  },
+  "7": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {"text": "{{negative_prompt}}", "clip": ["4", 1]}
+  },
+  "5": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {"width": "{{width}}", "height": "{{height}}", "batch_size": 1}
+  },
+  "3": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": "{{seed}}",
+      "steps": "{{steps}}",
+      "cfg": "{{cfg}}",
+      "sampler_name": "{{sampler}}",
+      "scheduler": "{{scheduler}}",
+      "denoise": 1.0,
+      "model": ["4", 0],
+      "positive": ["6", 0],
+      "negative": ["7", 0],
+      "latent_image": ["5", 0]
+    }
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "inputs": {"samples": ["3", 0], "vae": ["4", 2]}
+  },
+  "9": {
+    "class_type": "SaveImage",
+    "inputs": {"images": ["8", 0], "filename_prefix": "vpipe"}
+  }
+}

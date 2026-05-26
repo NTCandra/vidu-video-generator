@@ -20,10 +20,10 @@ def test_scenes_not_implemented():
     assert "not implemented" in result.output
 
 
-def test_images_not_implemented():
-    result = runner.invoke(app, ["images", "--scenes", "fake.json"])
+def test_images_missing_scenes_file():
+    result = runner.invoke(app, ["images", "--scenes", "nonexistent.json"])
     assert result.exit_code == 1
-    assert "not implemented" in result.output
+    assert "not found" in result.output
 
 
 def test_voice_not_implemented():
