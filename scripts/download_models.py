@@ -95,7 +95,7 @@ def download_file(entry: dict, comfyui_root: Path) -> None:
         local_dir=str(dest_dir),
     )
     src = Path(downloaded)
-    if src.name != rename_to:
+    if src != final_path:
         src.rename(final_path)
 
     digest = sha256(final_path)
