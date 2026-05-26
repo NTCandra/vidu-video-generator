@@ -29,7 +29,7 @@ imagegen:
   # Sampler settings
   steps: 28
   cfg: 6.5
-  sampler: dpm++_2m
+  sampler: dpmpp_2m
   scheduler: karras
   # Max retries on generation failure (new seed each time)
   max_retries: 3
