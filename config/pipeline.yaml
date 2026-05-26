@@ -23,11 +23,13 @@ imagegen:
   comfyui_url: http://127.0.0.1:8188
   # Default workflow file (relative to workflows/)
   default_workflow: txt2img_base.json
+  # Dedicated VAE for sharper output (recommended for Illustrious XL)
+  vae: sdxl_vae_fp16.safetensors
   # Output image size
   width: 1024
   height: 1024
   # Sampler settings
-  steps: 28
+  steps: 30
   cfg: 6.5
   sampler: dpmpp_2m
   scheduler: karras
